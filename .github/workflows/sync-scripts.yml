@@ -27,7 +27,7 @@ jobs:
           GH_TOKEN: ${{ secrets.FABLE_ACCESS_TOKEN }}
         run: |
           # Configure git to use token authentication (works with private repos)
-          git config --global url."https://x-access-token:${FABLE_ACCESS_TOKEN}@github.com/".insteadOf "https://github.com/"
+          git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
 
           # List of screenplay repos to sync
           REPOS=(
