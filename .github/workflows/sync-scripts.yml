@@ -1,0 +1,75 @@
+name: Sync Demo Scripts
+
+on:
+  # Run every 6 hours
+  schedule:
+    - cron: '0 */6 * * *'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+  # Optional: Trigger on push to main
+  push:
+    branches: [ main ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout demo-scripts repo
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync from individual screenplay repos
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Configure git to use token authentication (works with private repos)
+          git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
+
+          # List of screenplay repos to sync
+          REPOS=(
+            "c7"
+          )
+
+          for repo in "${REPOS[@]}"; do
+            echo "Syncing $repo..."
+
+            # Clone individual repo (works with public or private repos)
+            git clone https://github.com/hellofable/$repo /tmp/$repo --depth 1 --quiet
+
+            if [ $? -ne 0 ]; then
+              echo "  ❌ Failed to clone $repo"
+              continue
+            fi
+
+            # Create directory in demo-scripts repo
+            mkdir -p $repo
+
+            # Copy screenplay files
+            cp /tmp/$repo/screenplay.fountain $repo/ 2>/dev/null || echo "  ⚠️  No screenplay.fountain"
+            cp /tmp/$repo/metadata.json $repo/ 2>/dev/null || echo "  ⚠️  No metadata.json"
+            cp /tmp/$repo/comments.json $repo/ 2>/dev/null || echo "  ⚠️  No comments.json"
+            cp /tmp/$repo/chat.json $repo/ 2>/dev/null || echo "  ⚠️  No chat.json"
+
+            # Cleanup temp
+            rm -rf /tmp/$repo
+
+            echo "  ✅ Synced $repo"
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add .
+
+          # Only commit if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-sync from screenplay repos [$(date +'%Y-%m-%d %H:%M')]"
+            git push
+          fi
