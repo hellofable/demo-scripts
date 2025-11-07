@@ -31,7 +31,8 @@ jobs:
 
           # List of screenplay repos to sync
           REPOS=(
-            "Fable-C7-IRON22"
+            "Fable-C7-SAND30",
+            "Fable-cats-MOSS14"
           )
 
           for repo in "${REPOS[@]}"; do
