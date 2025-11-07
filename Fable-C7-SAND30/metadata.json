@@ -1,0 +1,21 @@
+{
+  "id": "5023c011-708f-4a67-9b39-c4831972a394",
+  "title": "C7",
+  "synopsis": "",
+  "revisionCount": 6,
+  "_updatedAt": "2025-11-06T17:50:08.469Z",
+  "_shas": {
+    "fountain": "fe8a018d6a9718de36b2effe5bde4e282ec0568e",
+    "comments": "7906c7eb5bfc89a41dd711b30f9c5aa30e2345d2",
+    "chat": "5c0bf6dc212618e88b077e3724a731fc41314efc"
+  },
+  "voice": {
+    "provider": "whereby",
+    "url": "https://fable.whereby.com/fable5023c011708f4a679b39c4831972a39478b7707a-b37d-404d-ba29-566029ded544",
+    "hostUrl": null,
+    "roomName": "/fable5023c011708f4a679b39c4831972a39478b7707a-b37d-404d-ba29-566029ded544",
+    "meetingId": "114515183",
+    "createdAt": "2025-11-06T17:07:30.257Z",
+    "endDate": "2027-11-06T17:07:29.821Z"
+  }
+}
