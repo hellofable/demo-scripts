@@ -33,6 +33,7 @@ jobs:
           REPOS=(
             "Fable-C7-SAND30"
             "Fable-cats-MOSS14"
+            "Fable-xx-PINE55"
           )
 
           for repo in "${REPOS[@]}"; do
