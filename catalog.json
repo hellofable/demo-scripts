@@ -1,0 +1,38 @@
+{
+    "Fable-C7-SAND30": {
+        "featured": true,
+        "genre": "Sci-Fi Thriller",
+        "author": "Written by Alyssa Trent",
+        "tags": [
+            "Sci-Fi",
+            "Thriller",
+            "Studio Ready"
+        ],
+        "hook": "An off-world veteran is hunted by the corporation that sent him to war.",
+        "primaryCTA": "Open in Fable"
+    },
+    "Fable-cats-MOSS14": {
+        "featured": true,
+        "genre": "Fake Movie",
+        "author": "Written by Someone",
+        "tags": [
+            "Haha",
+            "Comedy",
+            "Studio Ready"
+        ],
+        "hook": "This is nothing",
+        "primaryCTA": "Open in Fable"
+    },
+    "Fable-xx-PINE55": {
+        "featured": true,
+        "genre": "xx",
+        "author": "Written by Someone",
+        "tags": [
+            "Haha",
+            "Comedy",
+            "Studio Ready"
+        ],
+        "hook": "This is nothing",
+        "primaryCTA": "Open in Fable"
+    }
+}
