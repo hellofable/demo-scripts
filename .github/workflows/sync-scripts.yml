@@ -1,75 +1,85 @@
 name: Sync Demo Scripts
 
 on:
-  # Run every 6 hours
   schedule:
     - cron: '0 */6 * * *'
-
-  # Allow manual triggering
   workflow_dispatch:
-
-  # Optional: Trigger on push to main
   push:
     branches: [ main ]
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout demo-scripts repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.FABLE_ACCESS_TOKEN }}
+          persist-credentials: false
 
       - name: Sync from individual screenplay repos
         env:
           GH_TOKEN: ${{ secrets.FABLE_ACCESS_TOKEN }}
         run: |
-          # Configure git to use token authentication (works with private repos)
+          # Ensure jq is available
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y jq
+          fi
+
+          # Configure git to use token authentication
           git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
 
-          # List of screenplay repos to sync (no commas in Bash arrays)
-          REPOS=(
-            "Fable-C7-SAND30"
-            "Fable-cats-MOSS14"
-            "Fable-xx-PINE55"
-          )
+          # Ensure GitHub Pages doesn't apply Jekyll processing
+          touch .nojekyll
 
+          # Build REPOS from catalog.json (skip entries with "disabled": true)
+          mapfile -t REPOS < <(jq -r 'to_entries | map(select(.value.disabled != true)) | .[].key' catalog.json)
+
+          # Cleanup: remove previously-synced repos no longer listed (marker-based)
+          shopt -s nullglob
+          for marker in */.synced-by-workflow; do
+            dir="${marker%/.synced-by-workflow}"
+            dir="${dir#./}"
+            case " ${REPOS[*]} " in
+              *" ${dir} "*) ;; # keep
+              *) echo "🧹 Removing ${dir} (not in catalog)"; rm -rf -- "${dir}";;
+            esac
+          done
+
+          # Sync each repo
           for repo in "${REPOS[@]}"; do
             echo "Syncing ${repo}..."
-
-            # Clone individual repo (works with public or private repos)
             if ! git clone "https://github.com/hellofable/${repo}" "/tmp/${repo}" --depth 1 --quiet; then
               echo "  ❌ Failed to clone ${repo}"
               continue
             fi
 
-            # Create directory in demo-scripts repo
             mkdir -p -- "${repo}"
-
-            # Copy screenplay files (optional files are fine)
             cp "/tmp/${repo}/screenplay.fountain" "${repo}/" 2>/dev/null || echo "  ⚠️  No screenplay.fountain"
             cp "/tmp/${repo}/metadata.json"       "${repo}/" 2>/dev/null || echo "  ⚠️  No metadata.json"
             cp "/tmp/${repo}/comments.json"       "${repo}/" 2>/dev/null || echo "  ⚠️  No comments.json"
             cp "/tmp/${repo}/chat.json"           "${repo}/" 2>/dev/null || echo "  ⚠️  No chat.json"
 
-            # Cleanup temp
-            rm -rf -- "/tmp/${repo}"
+            # Mark as managed by this workflow
+            touch "${repo}/.synced-by-workflow"
 
+            rm -rf -- "/tmp/${repo}"
             echo "  ✅ Synced ${repo}"
           done
 
       - name: Commit and push changes
+        env:
+          GH_TOKEN: ${{ secrets.FABLE_ACCESS_TOKEN }}
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add -A
-
-          # Only commit if there are changes
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
             git commit -m "Auto-sync from screenplay repos [$(date +'%Y-%m-%d %H:%M')]"
-            git push
+            # Push with PAT so downstream workflows (e.g., Pages deploy) can trigger
+            git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
+
