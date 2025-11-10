@@ -1,14 +1,13 @@
 {
-    "Fable-C7-SAND30": {
+    "Fable-Future-State-IRON61": {
         "featured": true,
-        "genre": "Sci-Fi Comedy",
+        "genre": "Sci-Fi",
         "author": "Written by Alyssa Trent",
         "tags": [
             "Sci-Fi",
             "Thriller",
-            "Studio Ready"
         ],
-        "hook": "An off-world veteran is hunted by the corporation that sent him to war.",
+        "hook": "A soldier returns from an off-world war and finds he is being hunted by the very corporation who sent him there.",
         "primaryCTA": "Open in Fable"
     }
 }
