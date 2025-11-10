@@ -2,12 +2,12 @@
   "id": "5023c011-708f-4a67-9b39-c4831972a394",
   "title": "C7",
   "synopsis": "",
-  "revisionCount": 6,
-  "_updatedAt": "2025-11-06T17:50:08.469Z",
+  "revisionCount": 7,
+  "_updatedAt": "2025-11-09T20:43:39.825Z",
   "_shas": {
     "fountain": "fe8a018d6a9718de36b2effe5bde4e282ec0568e",
     "comments": "7906c7eb5bfc89a41dd711b30f9c5aa30e2345d2",
-    "chat": "5c0bf6dc212618e88b077e3724a731fc41314efc"
+    "chat": "3366b44e30942a33623b931d3d59c90e19a666c4"
   },
   "voice": {
     "provider": "whereby",
