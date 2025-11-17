@@ -2,11 +2,11 @@
   "id": "141e9b90-4398-4e4c-b5a3-ab7b61a42ad3",
   "title": "Future State",
   "synopsis": "A soldier returns from an off-world war and finds he is being hunted by the very corporation who sent him there.",
-  "revisionCount": 4,
-  "_updatedAt": "2025-11-16T23:04:42.325Z",
+  "revisionCount": 10,
+  "_updatedAt": "2025-11-17T16:21:01.983Z",
   "_shas": {
-    "fountain": "929b0d6466246fb15229f5bcbb1e5354a07b47fa",
-    "comments": "1864b80355f48947afa334792aec2614026f16f8",
+    "fountain": "31554a941ffe0eed46d856d92ff1bc8b38c9c8a9",
+    "comments": "c4cb7b970dc66f5741f3f68feee911899e7d8cec",
     "chat": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc"
   },
   "voice": {
