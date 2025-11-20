@@ -2,8 +2,8 @@
   "id": "141e9b90-4398-4e4c-b5a3-ab7b61a42ad3",
   "title": "Future State",
   "synopsis": "A soldier returns from an off-world war and finds he is being hunted by the very corporation who sent him there.",
-  "revisionCount": 11,
-  "_updatedAt": "2025-11-18T15:40:21.194Z",
+  "revisionCount": 12,
+  "_updatedAt": "2025-11-19T21:12:01.378Z",
   "_shas": {
     "fountain": "21c480109b91ffe81d36ef934389aacb8240b524",
     "comments": "91dc2f2aa5a8d50bec2cdcaa0bab0b3350a90eef",
@@ -17,5 +17,6 @@
     "meetingId": "115237943",
     "createdAt": "2025-11-16T22:51:33.305Z",
     "endDate": "2027-11-16T22:51:32.154Z"
-  }
+  },
+  "isDeleted": true
 }
