@@ -21,32 +21,25 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.FABLE_ACCESS_TOKEN }}
         run: |
-          # Ensure jq is available
           if ! command -v jq >/dev/null 2>&1; then
             sudo apt-get update && sudo apt-get install -y jq
           fi
 
-          # Configure git to use token authentication
           git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
-
-          # Ensure GitHub Pages doesn't apply Jekyll processing
           touch .nojekyll
 
-          # Build REPOS from catalog.json (skip entries with "disabled": true)
           mapfile -t REPOS < <(jq -r 'to_entries | map(select(.value.disabled != true)) | .[].key' catalog.json)
 
-          # Cleanup: remove previously-synced repos no longer listed (marker-based)
           shopt -s nullglob
           for marker in */.synced-by-workflow; do
             dir="${marker%/.synced-by-workflow}"
             dir="${dir#./}"
             case " ${REPOS[*]} " in
-              *" ${dir} "*) ;; # keep
+              *" ${dir} "*) ;; 
               *) echo "🧹 Removing ${dir} (not in catalog)"; rm -rf -- "${dir}";;
             esac
           done
 
-          # Sync each repo
           for repo in "${REPOS[@]}"; do
             echo "Syncing ${repo}..."
             if ! git clone "https://github.com/hellofable/${repo}" "/tmp/${repo}" --depth 1 --quiet; then
@@ -55,14 +48,10 @@ jobs:
             fi
 
             mkdir -p -- "${repo}"
-            cp "/tmp/${repo}/screenplay.fountain" "${repo}/" 2>/dev/null || echo "  ⚠️  No screenplay.fountain"
+            cp "/tmp/${repo}/screenplay.bundle" "${repo}/" 2>/dev/null || echo "  ⚠️  No screenplay.bundle"
             cp "/tmp/${repo}/metadata.json"       "${repo}/" 2>/dev/null || echo "  ⚠️  No metadata.json"
-            cp "/tmp/${repo}/comments.json"       "${repo}/" 2>/dev/null || echo "  ⚠️  No comments.json"
-            cp "/tmp/${repo}/chat.json"           "${repo}/" 2>/dev/null || echo "  ⚠️  No chat.json"
 
-            # Mark as managed by this workflow
             touch "${repo}/.synced-by-workflow"
-
             rm -rf -- "/tmp/${repo}"
             echo "  ✅ Synced ${repo}"
           done
@@ -78,8 +67,6 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "Auto-sync from screenplay repos [$(date +'%Y-%m-%d %H:%M')]"
-            # Push with PAT so downstream workflows (e.g., Pages deploy) can trigger
             git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
             git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
-
