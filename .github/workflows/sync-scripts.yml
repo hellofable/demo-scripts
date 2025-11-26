@@ -21,6 +21,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.FABLE_ACCESS_TOKEN }}
         run: |
+          set -euo pipefail
+
           if ! command -v jq >/dev/null 2>&1; then
             sudo apt-get update && sudo apt-get install -y jq
           fi
@@ -28,30 +30,43 @@ jobs:
           git config --global url."https://x-access-token:${GH_TOKEN}@github.com/".insteadOf "https://github.com/"
           touch .nojekyll
 
+          jq -e . catalog.json >/dev/null
           mapfile -t REPOS < <(jq -r 'to_entries | map(select(.value.disabled != true)) | .[].key' catalog.json)
+          echo "Repos from catalog.json: ${REPOS[*]:-<none>}"
+          if [ ${#REPOS[@]} -eq 0 ]; then
+            echo "No repos listed in catalog.json"; exit 1
+          fi
 
           shopt -s nullglob
           for marker in */.synced-by-workflow; do
             dir="${marker%/.synced-by-workflow}"
             dir="${dir#./}"
             case " ${REPOS[*]} " in
-              *" ${dir} "*) ;; 
+              *" ${dir} "*) ;;
               *) echo "🧹 Removing ${dir} (not in catalog)"; rm -rf -- "${dir}";;
             esac
           done
 
           for repo in "${REPOS[@]}"; do
             echo "Syncing ${repo}..."
-            if ! git clone "https://github.com/hellofable/${repo}" "/tmp/${repo}" --depth 1 --quiet; then
-              echo "  ❌ Failed to clone ${repo}"
-              continue
-            fi
+            git clone "https://github.com/hellofable/${repo}" "/tmp/${repo}" --depth 1 --quiet
 
             mkdir -p -- "${repo}"
-            cp "/tmp/${repo}/screenplay.bundle" "${repo}/" 2>/dev/null || echo "  ⚠️  No screenplay.bundle"
-            cp "/tmp/${repo}/metadata.json"       "${repo}/" 2>/dev/null || echo "  ⚠️  No metadata.json"
+
+            if [ -f "/tmp/${repo}/screenplay.bundle" ]; then
+              cp "/tmp/${repo}/screenplay.bundle" "${repo}/"
+            else
+              echo "❌ ${repo} missing screenplay.bundle"; exit 1
+            fi
+
+            if [ -f "/tmp/${repo}/metadata.json" ]; then
+              cp "/tmp/${repo}/metadata.json" "${repo}/"
+            else
+              echo "❌ ${repo} missing metadata.json"; exit 1
+            fi
 
             touch "${repo}/.synced-by-workflow"
+            ls -al "${repo}"
             rm -rf -- "/tmp/${repo}"
             echo "  ✅ Synced ${repo}"
           done
@@ -63,6 +78,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
           git add -A
+          git status --short
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
