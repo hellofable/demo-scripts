@@ -59,10 +59,10 @@ jobs:
               echo "❌ ${repo} missing screenplay.bundle"; exit 1
             fi
 
-            if [ -f "/tmp/${repo}/metadata.json" ]; then
-              cp "/tmp/${repo}/metadata.json" "${repo}/"
+            if [ -f "/tmp/${repo}/screenplay.fountain" ]; then
+              cp "/tmp/${repo}/screenplay.fountain" "${repo}/"
             else
-              echo "❌ ${repo} missing metadata.json"; exit 1
+              echo "❌ ${repo} missing screenplay.fountain"; exit 1
             fi
 
             touch "${repo}/.synced-by-workflow"
