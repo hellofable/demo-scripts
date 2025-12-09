@@ -3,7 +3,8 @@
         "featured": true,
         "genre": "Comedy",
         "author": "Written by Woody Allen",
-        "tags": [   
+        "tags": [
+            "Outline"
         ],
         "hook": "While on a trip to Paris with his fiancée's family, a nostalgic screenwriter finds himself mysteriously going back to the 1920s every day at midnight.",
         "primaryCTA": "Open in Fable"
@@ -12,7 +13,8 @@
         "featured": true,
         "genre": "Fountain Tutorial",
         "author": "Written by Jini Kasting",
-        "tags": [   
+        "tags": [
+            "Tutorial"
         ],
         "hook": "Two writers meet in a cafe to discuss the Fountain markup language.",
         "primaryCTA": "Open in Fable"
