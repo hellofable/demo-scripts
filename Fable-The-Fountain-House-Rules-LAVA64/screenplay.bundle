@@ -3,10 +3,10 @@
   "id": "fbcf2356-c671-4740-9e04-bbc8910b409a",
   "title": "The Fountain House Rules",
   "synopsis": "Two writers meet in a cafe to discuss the fountain markup language.",
-  "fountainSha": "055b69ee6d050b54a61711de5deb33de8b08b669",
+  "fountainSha": "dd849f1790932b68194c4396065ff262b9dd5007",
   "voice": null,
-  "revisionCount": 41,
-  "updatedAt": "2025-12-09T18:39:12.047Z",
+  "revisionCount": 44,
+  "updatedAt": "2025-12-09T21:46:28.999Z",
   "chat": [],
   "notes": [
     {
@@ -15,7 +15,7 @@
       "authorId": "ag7osose3kx5j5u",
       "authorName": "Jini Kasting",
       "createdAt": "2025-12-09T18:26:02.491Z",
-      "updatedAt": "2025-12-09T18:37:44.298Z",
+      "updatedAt": "2025-12-09T21:46:26.852Z",
       "resolved": false,
       "resolutionNote": "",
       "replies": []
@@ -26,7 +26,7 @@
       "authorId": "ag7osose3kx5j5u",
       "authorName": "Jini Kasting",
       "createdAt": "2025-12-09T18:26:02.492Z",
-      "updatedAt": "2025-12-09T18:37:44.299Z",
+      "updatedAt": "2025-12-09T21:46:26.853Z",
       "resolved": false,
       "resolutionNote": "",
       "replies": []
