@@ -7,8 +7,14 @@
         ],
         "hook": "While on a trip to Paris with his fiancée's family, a nostalgic screenwriter finds himself mysteriously going back to the 1920s every day at midnight.",
         "primaryCTA": "Open in Fable"
+    },
+   "Fable-The-Fountain-House-Rules-LAVA64": {
+        "featured": true,
+        "genre": "Fountain Tutorial",
+        "author": "Written by Jini Kasting",
+        "tags": [   
+        ],
+        "hook": "Two writers meet in a cafe to discuss the Fountain markup language.",
+        "primaryCTA": "Open in Fable"
     }
 }
-
-
-
